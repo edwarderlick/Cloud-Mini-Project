@@ -6,8 +6,12 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship, backref
 from datetime import date
 from datetime import datetime
+import os
 
-ENGINE = create_engine("sqlite:///week1.db", echo=False)
+
+ENGINE = create_engine("mysql://{username}:{password}@ws-mini-project.cufddhv1m5jw.us-west-2.rds.amazonaws.com"\
+	.format(username=os.environ['USERNAME'], password=os.environ['PASSWORD'], echo=False)
+
 sqla_session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 
 Base = declarative_base()
