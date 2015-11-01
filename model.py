@@ -8,12 +8,10 @@ from datetime import date
 from datetime import datetime
 import os
 
-
-ENGINE = create_engine("mysql://{username}:{password}@ws-mini-project.cufddhv1m5jw.us-west-2.rds.amazonaws.com"\
-	.format(username=os.environ['USERNAME'], password=os.environ['PASSWORD'], echo=False)
+path = os.environ['MYPATH']
+ENGINE = create_engine(path, echo=True)
 
 sqla_session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
-
 Base = declarative_base()
 Base.query = sqla_session.query_property()
 
