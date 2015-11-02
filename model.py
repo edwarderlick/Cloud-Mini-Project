@@ -7,6 +7,7 @@ from sqlalchemy.orm import relationship, backref
 from datetime import date
 from datetime import datetime
 import os
+import redis
 
 path = os.environ['MYPATH']
 ENGINE = create_engine(path, echo=True)
@@ -14,6 +15,10 @@ ENGINE = create_engine(path, echo=True)
 sqla_session = scoped_session(sessionmaker(bind=ENGINE, autocommit=False, autoflush=False))
 Base = declarative_base()
 Base.query = sqla_session.query_property()
+
+myredis = redis.Redis(
+    host=os.environ['MYREDISHOST'],
+    port=os.environ['MYREDISPORT'])
 
 
 class Hit(Base):
@@ -27,3 +32,8 @@ class Hit(Base):
 def create_db():
 	"""Recreates the db."""
 	Base.metadata.create_all(ENGINE)
+
+def initialize_redis():
+	"""Initialized redis"""
+	myredis.set('hits', 0)
+	
